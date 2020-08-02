@@ -52,7 +52,6 @@ namespace HelloDlibDotNet.ViewModels
 
         #endregion
 
-
     }
 
 }

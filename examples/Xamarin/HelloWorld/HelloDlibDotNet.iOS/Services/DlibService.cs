@@ -16,8 +16,8 @@ namespace HelloDlibDotNet.iOS.Services
 
         public string GetVersion()
         {
-            // return DlibDotNet.Dlib.GetNativeVersion();
-            return "DlibDotNet.Dlib.GetNativeVersion()";
+            return DlibDotNet.Dlib.GetNativeVersion();
+            //return "DlibDotNet.Dlib.GetNativeVersion()";
         }
 
     }
