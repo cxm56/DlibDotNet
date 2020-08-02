@@ -14,12 +14,19 @@ namespace DlibDotNet
         /// If Linux, it will be converted to  libDlibDotNetNative.so
         /// If MacOSX, it will be converted to  libDlibDotNetNative.dylib
         /// If Windows, it will be available after call LoadLibrary.
+        /// If iOS, all static binaries are conbined to one.
         /// And this file name must not contain period. If it does,
         /// CLR does not add extension (.dll) and CLR fails to load library
         /// </summary>
+#if XAMARINIOS
+        public const string NativeLibrary = "__Internal";
+
+        public const string NativeDnnLibrary = "__Internal";
+#else
         public const string NativeLibrary = "DlibDotNetNative";
 
         public const string NativeDnnLibrary = "DlibDotNetNativeDnn";
+#endif
 
         public const CallingConvention CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl;
 
