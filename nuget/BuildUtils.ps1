@@ -105,7 +105,7 @@ class Config
    #  %6: Optional Argument
    #    if Target is cuda, CUDA version if Target is cuda [90/91/92/100/101/102/110]
    #    if Target is mkl and Windows, IntelMKL directory path
-   #    if Platform is ios and Target is arm, build platform of iOS (OS64/SIMULATOR64)
+   #    if Platform is ios and Target is arm, build platform of iOS (OS64/OS64COMBINED/SIMULATOR64)
    #***************************************
    Config(  [string]$Root,
             [string]$Configuration,
@@ -864,10 +864,31 @@ function ConfigIOS([Config]$Config)
 {
    if ($IsMacOS)
    {
-      $iOSPlatform = $Config.GetIOSPlatform()
+      # Requirement: CMake 3.14 or higher
+      $iosplatform = $Config.GetIOSPlatform().ToLower()
+      $iosArchitectures = ""
+      $combined = 0
+      switch($iosplatform)
+      {
+         "os64"
+         {
+            $iosArchitectures = "arm64"
+         }
+         "simulator64"
+         {
+            $iosArchitectures = "x86_64"
+         }
+         "os64combined"
+         {
+            $iosArchitectures = "arm64;x86_64"
+            $combined = 1
+         }
+      }
       cmake -G Xcode `
             -D CMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake `
-            -D PLATFORM=$iOSPlatform `
+            -D CMAKE_SYSTEM_NAME=iOS `
+            -D CMAKE_OSX_ARCHITECTURES=$iosArchitectures `
+            -D CMAKE_IOS_INSTALL_COMBINED=$combined `
             -D DLIB_USE_CUDA=OFF `
             -D DLIB_USE_BLAS=OFF `
             -D DLIB_USE_LAPACK=OFF `
@@ -883,6 +904,24 @@ function ConfigIOS([Config]$Config)
             -D PNG_PNG_INCLUDE_DIR="" `
             -D DLIB_NO_GUI_SUPPORT=ON `
             ..
+      # cmake -G Xcode `
+      #       -D CMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake `
+      #       -D PLATFORM=$iOSPlatform `
+      #       -D DLIB_USE_CUDA=OFF `
+      #       -D DLIB_USE_BLAS=OFF `
+      #       -D DLIB_USE_LAPACK=OFF `
+      #       -D mkl_include_dir="" `
+      #       -D mkl_intel="" `
+      #       -D mkl_rt="" `
+      #       -D mkl_thread="" `
+      #       -D mkl_pthread="" `
+      #       -D LIBPNG_IS_GOOD=OFF `
+      #       -D PNG_FOUND=OFF `
+      #       -D PNG_LIBRARY_RELEASE="" `
+      #       -D PNG_LIBRARY_DEBUG="" `
+      #       -D PNG_PNG_INCLUDE_DIR="" `
+      #       -D DLIB_NO_GUI_SUPPORT=ON `
+      #       ..
    }
    else
    {      

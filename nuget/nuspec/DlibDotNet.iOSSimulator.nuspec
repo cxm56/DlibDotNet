@@ -1,0 +1,37 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>DlibDotNet.iOSSimulator</id>
+    <version>19.20.0.20200725</version>
+    <title>DlibDotNet</title>
+    <authors>Takuya Takeuchi</authors>
+    <owners>Takuya Takeuchi</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <projectUrl>https://github.com/takuya-takeuchi/DlibDotNet</projectUrl>
+    <iconUrl>https://github.com/takuya-takeuchi/DlibDotNet/blob/master/nuget/ml128.png?raw=true</iconUrl>
+    <description>Dlib wrapper library written in C++ and C# for iOS arm64</description>
+    <releaseNotes></releaseNotes>
+    <copyright>© Takuya Takeuchi 2017-2020</copyright>
+    <tags>dlib .net machinelearning</tags>
+    <serviceable>true</serviceable>
+  </metadata>
+  
+  <files>
+    <file src="build\ios\DlibDotNet.targets" target="build\DlibDotNet.targets" />
+
+    <file src="..\..\src\DlibDotNet\bin\Release_Xamarin.iOS\netstandard2.0\DlibDotNet.dll" target="lib\XamariniOS" />
+
+    <file src="..\artifacts\ios\native\ios-simulator\libDlibDotNetNative.a" target="native\ios\libDlibDotNetNative.a" />
+    <file src="..\artifacts\ios\native\ios-simulator\libDlibDotNetNativeDnn.a" target="native\ios\libDlibDotNetNativeDnn.a" />
+
+    <!-- license -->
+    <file src="..\..\LICENSE.txt" target="" />
+    <file src="..\..\Licenses\dlib.txt" target="licenses" />
+    <file src="..\..\Licenses\giflib.txt" target="licenses" />
+    <file src="..\..\Licenses\libjpeg.txt" target="licenses" />
+    <file src="..\..\Licenses\libpng.txt" target="licenses" />
+    <file src="..\..\Licenses\zlib.txt" target="licenses" />
+  </files>
+
+</package>
