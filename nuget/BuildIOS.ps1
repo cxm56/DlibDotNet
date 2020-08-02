@@ -17,13 +17,15 @@ $DlibDotNetSourceRoot = Join-Path $DlibDotNetRoot src
 $BuildSourceHash = [Config]::GetBinaryLibraryIOSHash()
 
 $BuildTargets = @()
-$BuildTargets += New-Object PSObject -Property @{Target = "ios";  Architecture = 64; RID = "$OperatingSystem-x64";   CUDA = 0   }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "arm";   Architecture = 64; RID = "$OperatingSystem-arm64";             iOSPlatform = "OS64" }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "arm";   Architecture = 64; RID = "$OperatingSystem-arm64-simulator";   iOSPlatform = "SIMULATOR64" }
 
 foreach($BuildTarget in $BuildTargets)
 {
    $target = $BuildTarget.Target
    $architecture = $BuildTarget.Architecture
    $rid = $BuildTarget.RID
+   $option = $BuildTarget.iOSPlatform
 
    $Config = [Config]::new($DlibDotNetRoot, "Release", $target, $architecture, "ios", $option)
    $libraryDir = Join-Path "artifacts" $Config.GetArtifactDirectoryName()

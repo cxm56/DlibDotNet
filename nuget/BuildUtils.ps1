@@ -52,6 +52,12 @@ class Config
    }
 
    $VisualStudio = "Visual Studio 15 2017"
+
+   $iOSPlatformArray =
+   @(
+      "OS64",
+      "SIMULATOR64"
+   )
    
    static $BuildLibraryWindowsHash = 
    @{
@@ -86,6 +92,7 @@ class Config
    [int]      $_CudaVersion
    [string]   $_AndroidABI
    [string]   $_AndroidNativeAPILevel
+   [string]   $_iOSPlatform
 
    #***************************************
    # Arguments
@@ -97,6 +104,7 @@ class Config
    #  %6: Optional Argument
    #    if Target is cuda, CUDA version if Target is cuda [90/91/92/100/101/102/110]
    #    if Target is mkl and Windows, IntelMKL directory path
+   #    if Platform is ios and Target is arm, build platform of iOS (OS64/SIMULATOR64)
    #***************************************
    Config(  [string]$Root,
             [string]$Configuration,
@@ -160,6 +168,19 @@ class Config
             $setting = ConvertFrom-Json $decoded
             $this._AndroidABI            = $setting.ANDROID_ABI
             $this._AndroidNativeAPILevel = $setting.ANDROID_NATIVE_API_LEVEL
+         }
+         "ios"
+         {
+            if ($Target -eq "arm")
+            {
+               $this._iOSPlatform = $Option
+               if ($this.iOSPlatformArray.Contains($this._iOSPlatform) -ne $True)
+               {
+                  $candidate = $this.iOSPlatformArray -join "/"
+                  Write-Host "Error: Specify iOS platform [${candidate}]" -ForegroundColor Red
+                  exit -1
+               }
+            }
          }
       }
 
@@ -236,6 +257,11 @@ class Config
    [string] GetAndroidNativeAPILevel()
    {
       return $this._AndroidNativeAPILevel
+   }
+
+   [string] GetIOSPlatform()
+   {
+      return $this._iOSPlatform
    }
 
    [string] GetArtifactDirectoryName()
@@ -370,6 +396,25 @@ class Config
       {
          $version = $this._CudaVersion
          return "build_${osname}_${platform}_cuda-${version}_${architecture}"
+      }
+      elseif ($target -eq "arm" -and $platform -eq "ios")
+      {
+         $iosplatform = $this._iOSPlatform.ToLower()
+         switch($iosplatform)
+         {
+            "os64"
+            {
+               # build_osx_ios_arm_os64
+               return "build_${osname}_${platform}_${target}_${iosplatform}"
+            }
+            "simulator64"
+            {
+               # build_osx_ios_arm_simulator64
+               return "build_${osname}_${platform}_${target}_${iosplatform}"
+            }
+         }
+         
+         return "build_${osname}_${platform}_${target}_${architecture}"
       }
       else
       {
@@ -813,9 +858,10 @@ function ConfigIOS([Config]$Config)
 {
    if ($IsMacOS)
    {
+      $iOSPlatform = $Config.GetIOSPlatform()
       cmake -G Xcode `
             -D CMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake `
-            -D PLATFORM=OS64COMBINED `
+            -D PLATFORM=$iOSPlatform `
             -D DLIB_USE_CUDA=OFF `
             -D DLIB_USE_BLAS=OFF `
             -D DLIB_USE_LAPACK=OFF `
