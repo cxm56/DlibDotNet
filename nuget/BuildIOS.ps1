@@ -19,6 +19,7 @@ $BuildSourceHash = [Config]::GetBinaryLibraryIOSHash()
 $BuildTargets = @()
 $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "arm";   Architecture = 64; RID = "$OperatingSystem-arm64";             iOSPlatform = "OS64" }
 $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "arm";   Architecture = 64; RID = "$OperatingSystem-arm64-simulator";   iOSPlatform = "SIMULATOR64" }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "arm";   Architecture = 64; RID = "$OperatingSystem-arm64-combined";    iOSPlatform = "OS64COMBINED" }
 
 foreach($BuildTarget in $BuildTargets)
 {
@@ -31,23 +32,23 @@ foreach($BuildTarget in $BuildTargets)
    $libraryDir = Join-Path "artifacts" $Config.GetArtifactDirectoryName()
    $build = $Config.GetBuildDirectoryName("")
 
-   foreach ($key in $BuildSourceHash.keys)
-   {
-      $srcDir = Join-Path $DlibDotNetSourceRoot $key
+   # foreach ($key in $BuildSourceHash.keys)
+   # {
+   #    $srcDir = Join-Path $DlibDotNetSourceRoot $key
 
-      # Move to build target directory
-      Set-Location -Path $srcDir
+   #    # Move to build target directory
+   #    Set-Location -Path $srcDir
 
-      $arc = $Config.GetArchitectureName()
-      Write-Host "Build $key [$arc] for $target" -ForegroundColor Green
-      Build -Config $Config
+   #    $arc = $Config.GetArchitectureName()
+   #    Write-Host "Build $key [$arc] for $target" -ForegroundColor Green
+   #    Build -Config $Config
 
-      if ($lastexitcode -ne 0)
-      {
-         Set-Location -Path $Current
-         exit -1
-      }
-   }
+   #    if ($lastexitcode -ne 0)
+   #    {
+   #       Set-Location -Path $Current
+   #       exit -1
+   #    }
+   # }
   
    # Copy output binary
    foreach ($key in $BuildSourceHash.keys)
@@ -56,7 +57,38 @@ foreach($BuildTarget in $BuildTargets)
       $dll = $BuildSourceHash[$key]
       $dstDir = Join-Path $Current $libraryDir
 
-      CopyToArtifact -configuration "Release-iphoneos" -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
+
+      # ios/runtimes/ios-arm64/native/libDlibDotNetNativeDnn.a
+      switch($option.ToLower())
+      {
+         "os64"
+         {
+            CopyiOSToArtifact -configuration "Release-iphoneos" `
+                              -srcDir $srcDir `
+                              -build $build `
+                              -libraryName $dll `
+                              -dstDir $dstDir `
+                              -platform "ios"
+         }
+         "simulator64"
+         {
+            CopyiOSToArtifact -configuration "Release-iphonesimulator" `
+                              -srcDir $srcDir `
+                              -build $build `
+                              -libraryName $dll `
+                              -dstDir $dstDir `
+                              -platform "ios-simulator"
+         }
+         "combined"
+         {
+            CopyiOSToArtifact -configuration "Release-iphoneos" `
+                              -srcDir $srcDir `
+                              -build $build `
+                              -libraryName $dll `
+                              -dstDir $dstDir `
+                              -platform "ios-combined"
+         }
+      }
    }
 }
 

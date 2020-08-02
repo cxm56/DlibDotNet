@@ -56,7 +56,8 @@ class Config
    $iOSPlatformArray =
    @(
       "OS64",
-      "SIMULATOR64"
+      "SIMULATOR64",
+      "OS64COMBINED"
    )
    
    static $BuildLibraryWindowsHash = 
@@ -410,6 +411,11 @@ class Config
             "simulator64"
             {
                # build_osx_ios_arm_simulator64
+               return "build_${osname}_${platform}_${target}_${iosplatform}"
+            }
+            "os64combined"
+            {
+               # build_osx_ios_arm_os64combined
                return "build_${osname}_${platform}_${target}_${iosplatform}"
             }
          }
@@ -975,6 +981,22 @@ function CopyToArtifact()
    $output = Join-Path $dstDir runtimes | `
             Join-Path -ChildPath ${rid} | `
             Join-Path -ChildPath native | `
+            Join-Path -ChildPath $libraryName
+
+   Write-Host "Copy ${libraryName} to ${output}" -ForegroundColor Green
+   Copy-Item ${binary} ${output}
+}
+
+function CopyiOSToArtifact()
+{
+   Param([string]$srcDir, [string]$build, [string]$libraryName, [string]$dstDir, [string]$platform, [string]$configuration)
+
+   $binary = Join-Path ${srcDir} ${build}  | `
+            Join-Path -ChildPath ${configuration}  | `
+            Join-Path -ChildPath ${libraryName}
+
+   $output = Join-Path $dstDir native | `
+            Join-Path -ChildPath $platform | `
             Join-Path -ChildPath $libraryName
 
    Write-Host "Copy ${libraryName} to ${output}" -ForegroundColor Green
