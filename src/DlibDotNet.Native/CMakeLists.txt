@@ -151,3 +151,17 @@ set(CompilerFlags
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
+
+if (${CMAKE_SYSTEM_NAME:} MATCHES "iOS")
+    set_target_properties(${PROJ_NAME} PROPERTIES
+        FRAMEWORK TRUE
+        FRAMEWORK_VERSION C
+        #MACOSX_FRAMEWORK_IDENTIFIER com.cmake.dynamicFramework
+        #MACOSX_FRAMEWORK_INFO_PLIST Info.plist
+        # "current version" in semantic format in Mach-O binary file
+        VERSION 1.0.0
+        # "compatibility version" in semantic format in Mach-O binary file
+        SOVERSION 1.0.0
+        XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer"
+    )
+endif()
