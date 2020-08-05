@@ -153,6 +153,8 @@ set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+    install(TARGETS ${PROJ_NAME} DESTINATION framework)
+
     set_target_properties(${PROJ_NAME} PROPERTIES
         FRAMEWORK TRUE
         FRAMEWORK_VERSION C
