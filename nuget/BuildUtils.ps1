@@ -196,6 +196,11 @@ class Config
       $this._Platform = $Platform
    }
 
+   [boolean] IsWithInstall()
+   {
+      return $this._WithInstall
+   }
+
    static [string] Base64Encode([string]$text)
    {
       $byte = ([System.Text.Encoding]::Default).GetBytes($text)
@@ -1013,7 +1018,7 @@ function Build([Config]$Config)
       }
    }
 
-   if ($this._WithInstall)
+   if ($Config.IsWithInstall() -eq $True)
    {
       cmake --build . --config $Config.GetConfigurationName() --target install
    }
