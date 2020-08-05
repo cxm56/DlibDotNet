@@ -25,10 +25,14 @@
 
     <file src="..\..\src\DlibDotNet\bin\Release_Xamarin.iOS\netstandard2.0\DlibDotNet.dll" target="lib\XamariniOS" />
 
-    <file src="..\artifacts\ios\native\ios\DlibDotNetNative.framework\*" target="build\XamariniOS\ios-device\DlibDotNetNative.framework" />
-    <file src="..\artifacts\ios\native\ios-simulator\DlibDotNetNative.framework\*" target="build\XamariniOS\ios-simulator\DlibDotNetNative.framework" />
-    <file src="..\artifacts\ios\native\ios\DlibDotNetNativeDnn.framework\*" target="build\XamariniOS\ios-device\DlibDotNetNativeDnn.framework" />
-    <file src="..\artifacts\ios\native\ios-simulator\DlibDotNetNativeDnn.framework\*" target="build\XamariniOS\ios-simulator\DlibDotNetNativeDnn.framework" />
+    <file src="..\artifacts\ios\native\ios\DlibDotNetNative.framework\DlibDotNetNative" target="build\XamariniOS\ios-device\DlibDotNetNative.framework" />
+    <file src="..\artifacts\ios\native\ios\DlibDotNetNative.framework\Info.plist" target="build\XamariniOS\ios-device\DlibDotNetNative.framework" />
+    <file src="..\artifacts\ios\native\ios-simulator\DlibDotNetNative.framework\DlibDotNetNative" target="build\XamariniOS\ios-simulator\DlibDotNetNative.framework" />
+    <file src="..\artifacts\ios\native\ios-simulator\DlibDotNetNative.framework\Info.plist" target="build\XamariniOS\ios-simulator\DlibDotNetNative.framework" />
+    <file src="..\artifacts\ios\native\ios\DlibDotNetNativeDnn.framework\DlibDotNetNativeDnn" target="build\XamariniOS\ios-device\DlibDotNetNativeDnn.framework" />
+    <file src="..\artifacts\ios\native\ios\DlibDotNetNativeDnn.framework\Info.plist" target="build\XamariniOS\ios-device\DlibDotNetNativeDnn.framework" />
+    <file src="..\artifacts\ios\native\ios-simulator\DlibDotNetNativeDnn.framework\DlibDotNetNativeDnn" target="build\XamariniOS\ios-simulator\DlibDotNetNativeDnn.framework" />
+    <file src="..\artifacts\ios\native\ios-simulator\DlibDotNetNativeDnn.framework\Info.plist" target="build\XamariniOS\ios-simulator\DlibDotNetNativeDnn.framework" />
 
     <!-- license -->
     <file src="..\..\LICENSE.txt" target="" />
