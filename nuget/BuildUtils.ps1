@@ -94,6 +94,7 @@ class Config
    [string]   $_AndroidABI
    [string]   $_AndroidNativeAPILevel
    [string]   $_iOSPlatform
+   [boolean]  $_WithInstall
 
    #***************************************
    # Arguments
@@ -115,6 +116,8 @@ class Config
             [string]$Option
          )
    {
+      $this._WithInstall = $False
+
       if ($this.ConfigurationArray.Contains($Configuration) -eq $False)
       {
          $candidate = $this.ConfigurationArray -join "/"
@@ -182,6 +185,7 @@ class Config
                   exit -1
                }
             }
+            $this._WithInstall = $True
          }
       }
 
@@ -866,62 +870,68 @@ function ConfigIOS([Config]$Config)
    {
       # Requirement: CMake 3.14 or higher
       $iosplatform = $Config.GetIOSPlatform().ToLower()
-      $iosArchitectures = ""
-      $combined = 0
+      $CMAKE_OSX_DEPLOYMENT_TARGET = "9.3"
+      $current = Get-Location
+      $installDir = Join-Path $current install
       switch($iosplatform)
       {
          "os64"
          {
-            $iosArchitectures = "arm64"
+            $CMAKE_OSX_ARCHITECTURES = "arm64;arm64e"
+            $CMAKE_IOS_INSTALL_COMBINED="NO"
+            $CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH="NO"
+            cmake -G Xcode `
+                  -D CMAKE_SYSTEM_NAME=iOS `
+                  -D CMAKE_OSX_ARCHITECTURES=$CMAKE_OSX_ARCHITECTURES `
+                  -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} `
+                  -D CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH=$CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH `
+                  -D CMAKE_IOS_INSTALL_COMBINED=$CMAKE_IOS_INSTALL_COMBINED `
+                  -D CMAKE_INSTALL_PREFIX=${installDir} `
+                  -D DLIB_USE_CUDA=OFF `
+                  -D DLIB_USE_BLAS=OFF `
+                  -D DLIB_USE_LAPACK=OFF `
+                  -D mkl_include_dir="" `
+                  -D mkl_intel="" `
+                  -D mkl_rt="" `
+                  -D mkl_thread="" `
+                  -D mkl_pthread="" `
+                  -D LIBPNG_IS_GOOD=OFF `
+                  -D PNG_FOUND=OFF `
+                  -D PNG_LIBRARY_RELEASE="" `
+                  -D PNG_LIBRARY_DEBUG="" `
+                  -D PNG_PNG_INCLUDE_DIR="" `
+                  -D DLIB_NO_GUI_SUPPORT=ON `
+                  ..
          }
          "simulator64"
          {
-            $iosArchitectures = "x86_64"
-         }
-         "os64combined"
-         {
-            $iosArchitectures = "arm64;x86_64"
-            $combined = 1
+            $CMAKE_OSX_ARCHITECTURES = "x86_64"
+            $CMAKE_IOS_INSTALL_COMBINED="YES"
+            $CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH="YES"
+            cmake -G Xcode `
+                  -D CMAKE_SYSTEM_NAME=iOS `
+                  -D CMAKE_OSX_ARCHITECTURES=$CMAKE_OSX_ARCHITECTURES `
+                  -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} `
+                  -D CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH=$CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH `
+                  -D CMAKE_IOS_INSTALL_COMBINED=$CMAKE_IOS_INSTALL_COMBINED `
+                  -D CMAKE_INSTALL_PREFIX=${installDir} `
+                  -D DLIB_USE_CUDA=OFF `
+                  -D DLIB_USE_BLAS=OFF `
+                  -D DLIB_USE_LAPACK=OFF `
+                  -D mkl_include_dir="" `
+                  -D mkl_intel="" `
+                  -D mkl_rt="" `
+                  -D mkl_thread="" `
+                  -D mkl_pthread="" `
+                  -D LIBPNG_IS_GOOD=OFF `
+                  -D PNG_FOUND=OFF `
+                  -D PNG_LIBRARY_RELEASE="" `
+                  -D PNG_LIBRARY_DEBUG="" `
+                  -D PNG_PNG_INCLUDE_DIR="" `
+                  -D DLIB_NO_GUI_SUPPORT=ON `
+                  ..
          }
       }
-      cmake -G Xcode `
-            -D CMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake `
-            -D CMAKE_SYSTEM_NAME=iOS `
-            -D CMAKE_OSX_ARCHITECTURES=$iosArchitectures `
-            -D CMAKE_IOS_INSTALL_COMBINED=$combined `
-            -D DLIB_USE_CUDA=OFF `
-            -D DLIB_USE_BLAS=OFF `
-            -D DLIB_USE_LAPACK=OFF `
-            -D mkl_include_dir="" `
-            -D mkl_intel="" `
-            -D mkl_rt="" `
-            -D mkl_thread="" `
-            -D mkl_pthread="" `
-            -D LIBPNG_IS_GOOD=OFF `
-            -D PNG_FOUND=OFF `
-            -D PNG_LIBRARY_RELEASE="" `
-            -D PNG_LIBRARY_DEBUG="" `
-            -D PNG_PNG_INCLUDE_DIR="" `
-            -D DLIB_NO_GUI_SUPPORT=ON `
-            ..
-      # cmake -G Xcode `
-      #       -D CMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake `
-      #       -D PLATFORM=$iOSPlatform `
-      #       -D DLIB_USE_CUDA=OFF `
-      #       -D DLIB_USE_BLAS=OFF `
-      #       -D DLIB_USE_LAPACK=OFF `
-      #       -D mkl_include_dir="" `
-      #       -D mkl_intel="" `
-      #       -D mkl_rt="" `
-      #       -D mkl_thread="" `
-      #       -D mkl_pthread="" `
-      #       -D LIBPNG_IS_GOOD=OFF `
-      #       -D PNG_FOUND=OFF `
-      #       -D PNG_LIBRARY_RELEASE="" `
-      #       -D PNG_LIBRARY_DEBUG="" `
-      #       -D PNG_PNG_INCLUDE_DIR="" `
-      #       -D DLIB_NO_GUI_SUPPORT=ON `
-      #       ..
    }
    else
    {      
@@ -995,7 +1005,14 @@ function Build([Config]$Config)
       }
    }
 
-   cmake --build . --config $Config.GetConfigurationName()
+   if ($this._WithInstall)
+   {
+      cmake --build . --config $Config.GetConfigurationName() --target install
+   }
+   else
+   {
+      cmake --build . --config $Config.GetConfigurationName()
+   }
 
    # Move to Root directory
    Set-Location -Path $Current
