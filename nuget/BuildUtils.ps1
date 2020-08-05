@@ -881,6 +881,10 @@ function ConfigIOS([Config]$Config)
             $CMAKE_IOS_INSTALL_COMBINED="NO"
             $CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH="NO"
             cmake -G Xcode `
+                  -D CMAKE_THREAD_LIBS_INIT="-lpthread" `
+                  -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+                  -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+                  -D CMAKE_USE_PTHREADS_INIT=1 `
                   -D CMAKE_SYSTEM_NAME=iOS `
                   -D CMAKE_OSX_ARCHITECTURES=$CMAKE_OSX_ARCHITECTURES `
                   -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} `
@@ -905,10 +909,14 @@ function ConfigIOS([Config]$Config)
          }
          "simulator64"
          {
-            $CMAKE_OSX_ARCHITECTURES = "x86_64"
+            $CMAKE_OSX_ARCHITECTURES = "arm64;x86_64"
             $CMAKE_IOS_INSTALL_COMBINED="YES"
             $CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH="YES"
             cmake -G Xcode `
+                  -D CMAKE_THREAD_LIBS_INIT="-lpthread" `
+                  -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+                  -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+                  -D CMAKE_USE_PTHREADS_INIT=1 `
                   -D CMAKE_SYSTEM_NAME=iOS `
                   -D CMAKE_OSX_ARCHITECTURES=$CMAKE_OSX_ARCHITECTURES `
                   -D CMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET} `
