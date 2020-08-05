@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.15.0)
 cmake_policy(SET CMP0053 NEW)
 cmake_policy(SET CMP0054 NEW)
 
@@ -152,7 +152,7 @@ set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
-if (${CMAKE_SYSTEM_NAME} MATCHES "iOS")
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
     set_target_properties(${PROJ_NAME} PROPERTIES
         FRAMEWORK TRUE
         FRAMEWORK_VERSION C

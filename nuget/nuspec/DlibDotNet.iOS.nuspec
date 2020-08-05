@@ -15,15 +15,20 @@
     <copyright>© Takuya Takeuchi 2017-2020</copyright>
     <tags>dlib .net machinelearning</tags>
     <serviceable>true</serviceable>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Xamarin.iOS" targetFramework="Xamarin.iOS1.0" />
+    </frameworkAssemblies>
   </metadata>
   
   <files>
-    <file src="build\ios\DlibDotNet.targets" target="build\DlibDotNet.targets" />
+    <file src="build\ios\DlibDotNet.targets" target="build\XamariniOS\DlibDotNet.targets" />
 
     <file src="..\..\src\DlibDotNet\bin\Release_Xamarin.iOS\netstandard2.0\DlibDotNet.dll" target="lib\XamariniOS" />
 
-    <file src="..\artifacts\ios\native\ios\libDlibDotNetNative.a" target="native\ios\libDlibDotNetNative.a" />
-    <file src="..\artifacts\ios\native\ios\libDlibDotNetNativeDnn.a" target="native\ios\libDlibDotNetNativeDnn.a" />
+    <file src="..\artifacts\ios\native\ios\DlibDotNetNative.framework\*" target="build\XamariniOS\ios-device\DlibDotNetNative.framework" />
+    <file src="..\artifacts\ios\native\ios-simulator\DlibDotNetNative.framework\*" target="build\XamariniOS\ios-simulator\DlibDotNetNative.framework" />
+    <file src="..\artifacts\ios\native\ios\DlibDotNetNativeDnn.framework\*" target="build\XamariniOS\ios-device\DlibDotNetNativeDnn.framework" />
+    <file src="..\artifacts\ios\native\ios-simulator\DlibDotNetNativeDnn.framework\*" target="build\XamariniOS\ios-simulator\DlibDotNetNativeDnn.framework" />
 
     <!-- license -->
     <file src="..\..\LICENSE.txt" target="" />
