@@ -1086,5 +1086,5 @@ function CopyiOSFrameworkToArtifact()
              Join-Path -ChildPath ${framework}
 
    Write-Host "Copy ${framework} to ${output}" -ForegroundColor Green
-   Copy-Item --Recursive ${binary} ${output}
+   Copy-Item ${binary} ${output}
 }
