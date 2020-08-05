@@ -80,8 +80,8 @@ class Config
    
    static $BuildLibraryIOSHash = 
    @{
-      "DlibDotNet.Native"     = "libDlibDotNetNative.a";
-      "DlibDotNet.Native.Dnn" = "libDlibDotNetNativeDnn.a"
+      "DlibDotNet.Native"     = "DlibDotNetNative.framework";
+      "DlibDotNet.Native.Dnn" = "DlibDotNetNativeDnn.framework"
    }
 
    [string]   $_Root
@@ -1061,13 +1061,30 @@ function CopyiOSToArtifact()
    Param([string]$srcDir, [string]$build, [string]$libraryName, [string]$dstDir, [string]$platform, [string]$configuration)
 
    $binary = Join-Path ${srcDir} ${build}  | `
-            Join-Path -ChildPath ${configuration}  | `
-            Join-Path -ChildPath ${libraryName}
+             Join-Path -ChildPath ${configuration}  | `
+             Join-Path -ChildPath ${libraryName}
 
    $output = Join-Path $dstDir native | `
-            Join-Path -ChildPath $platform | `
-            Join-Path -ChildPath $libraryName
+             Join-Path -ChildPath $platform | `
+             Join-Path -ChildPath $libraryName
 
    Write-Host "Copy ${libraryName} to ${output}" -ForegroundColor Green
    Copy-Item ${binary} ${output}
+}
+
+function CopyiOSFrameworkToArtifact()
+{
+   Param([string]$srcDir, [string]$build, [string]$framework, [string]$dstDir, [string]$platform)
+
+   $binary = Join-Path ${srcDir} ${build}  | `
+             Join-Path -ChildPath install  | `
+             Join-Path -ChildPath framework | `
+             Join-Path -ChildPath "${framework}/*"
+
+   $output = Join-Path $dstDir native | `
+             Join-Path -ChildPath $platform | `
+             Join-Path -ChildPath ${framework}
+
+   Write-Host "Copy ${framework} to ${output}" -ForegroundColor Green
+   Copy-Item --Recursive ${binary} ${output}
 }

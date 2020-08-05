@@ -54,7 +54,7 @@ foreach($BuildTarget in $BuildTargets)
    foreach ($key in $BuildSourceHash.keys)
    {
       $srcDir = Join-Path $DlibDotNetSourceRoot $key
-      $dll = $BuildSourceHash[$key]
+      $framework = $BuildSourceHash[$key]
       $dstDir = Join-Path $Current $libraryDir
 
       # ios/runtimes/ios-arm64/native/libDlibDotNetNativeDnn.a
@@ -62,21 +62,19 @@ foreach($BuildTarget in $BuildTargets)
       {
          "os64"
          {
-            CopyiOSToArtifact -configuration "Release-iphoneos" `
-                              -srcDir $srcDir `
-                              -build $build `
-                              -libraryName $dll `
-                              -dstDir $dstDir `
-                              -platform "ios"
+            CopyiOSFrameworkToArtifact -build $build `
+                                       -srcDir $srcDir `
+                                       -framework $framework `
+                                       -dstDir $dstDir `
+                                       -platform "ios"
          }
          "simulator64"
          {
-            CopyiOSToArtifact -configuration "Release-iphonesimulator" `
-                              -srcDir $srcDir `
-                              -build $build `
-                              -libraryName $dll `
-                              -dstDir $dstDir `
-                              -platform "ios-simulator"
+            CopyiOSFrameworkToArtifact -build $build `
+                                       -srcDir $srcDir `
+                                       -framework $framework `
+                                       -dstDir $dstDir `
+                                       -platform "ios-simulator"
          }
          "combined"
          {

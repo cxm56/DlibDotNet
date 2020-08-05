@@ -319,6 +319,8 @@ src/DlibDotNet.Native.Dnn/build*
 !nuget/ref/.keepfolder
 !nuget/lib/.keepfolder
 
+nuget/artifacts/ios/native/ios*/*.framework/*
+
 nuget/*.nupkg
 
 work
