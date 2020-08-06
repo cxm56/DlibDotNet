@@ -30,7 +30,11 @@ namespace DlibDotNet
 
         public const CallingConvention CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl;
 
+#if XAMARINIOS
+#else
         private static readonly WindowsLibraryLoader WindowsLibraryLoader = new WindowsLibraryLoader();
+#endif
+
 
         #endregion
 
@@ -38,11 +42,14 @@ namespace DlibDotNet
 
         static NativeMethods()
         {
+#if XAMARINIOS
+#else
             WindowsLibraryLoader.LoadLibraries(new[]
             {
                 $"{NativeLibrary}",
                 $"{NativeDnnLibrary}"
             });
+#endif
 
             foreach (var builder in new[] {
                 LossMetric_anet_type_create(),
