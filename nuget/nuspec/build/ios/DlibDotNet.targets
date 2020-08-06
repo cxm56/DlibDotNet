@@ -35,14 +35,12 @@
         <NativeReference Include="$(MSBuildThisFileDirectory)..\..\native\ios-device\libDlibDotNetNative.a">
             <Kind>Static</Kind>
             <ForceLoad>True</ForceLoad>
-            <!-- <SmartLink>True</SmartLink> -->
             <IsCxx>True</IsCxx>
             <LinkerFlags>-lc++</LinkerFlags>
         </NativeReference>
         <NativeReference Include="$(MSBuildThisFileDirectory)..\..\native\ios-device\libDlibDotNetNativeDnn.a">
             <Kind>Static</Kind>
             <ForceLoad>True</ForceLoad>
-            <!-- <SmartLink>True</SmartLink> -->
             <IsCxx>True</IsCxx>
             <LinkerFlags>-lc++</LinkerFlags>
         </NativeReference>
