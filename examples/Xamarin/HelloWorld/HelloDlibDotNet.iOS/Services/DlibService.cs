@@ -1,12 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Forms;
 using HelloDlibDotNet.Services.Interfaces;
-using DlibDotNet;
 
 namespace HelloDlibDotNet.iOS.Services
 {
@@ -17,7 +9,7 @@ namespace HelloDlibDotNet.iOS.Services
         public string GetVersion()
         {
             return DlibDotNet.Dlib.GetNativeVersion();
-            //return "DlibDotNet.Dlib.GetNativeVersion()";
+            //return NativeSharp.Native.Add(10, 20).ToString();
         }
 
     }
