@@ -871,6 +871,7 @@ function ConfigANDROID([Config]$Config)
 
 function ConfigIOS([Config]$Config)
 {
+   # https://cmake.org/cmake/help/v3.14/manual/cmake-toolchains.7.html#id25
    if ($IsMacOS)
    {
       # Requirement: CMake 3.14 or higher
