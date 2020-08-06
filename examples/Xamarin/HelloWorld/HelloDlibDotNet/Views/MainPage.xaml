@@ -9,6 +9,6 @@
         <!-- Place new controls here -->
         <Label Text="Welcome to DlibDotNet" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
         <Label Text="{Binding Version}" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
-        <Button Command="{Binding GetDlibVersionCommand}" />
+        <Button Text="GetVersion" Command="{Binding GetDlibVersionCommand}" />
     </StackLayout>
 </ContentPage>
