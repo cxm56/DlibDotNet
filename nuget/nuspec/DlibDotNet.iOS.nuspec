@@ -21,7 +21,7 @@
   </metadata>
   
   <files>
-    <file src="build\ios\DlibDotNet.targets" target="build\XamariniOS\DlibDotNet.targets" />
+    <file src="build\ios\DlibDotNet.targets" target="build\XamariniOS\DlibDotNet.iOS.targets" />
 
     <file src="..\..\src\DlibDotNet\bin\Release_Xamarin.iOS\netstandard2.0\DlibDotNet.dll" target="lib\XamariniOS" />
 
