@@ -4,13 +4,13 @@
             <Kind>Framework</Kind>
             <ForceLoad>True</ForceLoad>
             <SmartLink>True</SmartLink>
-            <IsCXX>True</IsCXX>
+            <IsCxx>True</IsCxx>
         </NativeReference>
         <NativeReference Include="$(MSBuildThisFileDirectory)ios-device\DlibDotNetNativeDnn.framework">
             <Kind>Framework</Kind>
             <ForceLoad>True</ForceLoad>
             <SmartLink>True</SmartLink>
-            <IsCXX>True</IsCXX>
+            <IsCxx>True</IsCxx>
         </NativeReference>
     </ItemGroup>
     <ItemGroup Condition="(('$(Platform)' == 'iPhoneSimulator'))">
@@ -18,13 +18,13 @@
             <Kind>Framework</Kind>
             <ForceLoad>True</ForceLoad>
             <SmartLink>True</SmartLink>
-            <IsCXX>True</IsCXX>
+            <IsCxx>True</IsCxx>
         </NativeReference>
         <NativeReference Include="$(MSBuildThisFileDirectory)ios-simulator\DlibDotNetNativeDnn.framework">
             <Kind>Framework</Kind>
             <ForceLoad>True</ForceLoad>
             <SmartLink>True</SmartLink>
-            <IsCXX>True</IsCXX>
+            <IsCxx>True</IsCxx>
         </NativeReference>
     </ItemGroup>
 </Project>
